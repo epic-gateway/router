@@ -16,7 +16,7 @@ spec:
       containers:
       - name: bird-egw
         image: registry.gitlab.com/acnodal/egw-router/bird-egw:2.0.7
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 100m
@@ -29,8 +29,15 @@ spec:
             add:
             - NET_ADMIN
           privileged: false
+        volumeMounts:
+        - name: bird-cm
+          mountPath: /usr/local/etc
       imagePullSecrets:
       - name: gitlab
+      volumes:
+      - name: bird-cm
+        configMap:
+          name: bird-cm
       hostNetwork: true
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
