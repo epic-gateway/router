@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bird-cm
-  namespace: bird
+  namespace: router
 data:
   bird.conf: |-
     # Basic configuration for EGW Routing Process
