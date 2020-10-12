@@ -1,14 +1,12 @@
 #!/usr/bin/env sh
+#!/bin/bash
 set -e
 
-
-DEFAULT_INT=`ip -4 route show default | awk '{print $5}'`
-if [ -z "DEFAULT_INT" ]; then
-    ROUTER_ID='127.0.0.1'
-else
-    ROUTER_ID=`ip -4 -br addr show "$DEFAULT_INT" | awk '{split($3,a,"/"); print a[1] }'`
+if  [ ! -f  "/usr/local/include/bird/envvar.conf" ]
+then 
+    cp -r /tmp/configlets/* /usr/local/include/bird
 fi
 
-sed -i "s/ROUTERID/${ROUTER_ID}/g" /usr/local/include/routerid.conf
+sed -i "s/K8SIPADDR/${BIRD_HOST}/g" /usr/local/include/bird/envvar.conf
 
 exec "$@"
