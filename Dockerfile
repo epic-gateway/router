@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # borrowed from https://github.com/pierky/dockerfiles/blob/master/bird/2.0.8/Dockerfile
 RUN apt-get update && apt-get install -y \
