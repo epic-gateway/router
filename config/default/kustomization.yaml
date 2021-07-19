@@ -1,0 +1,23 @@
+# "root" kustomization directory for EPIC router. This is the
+# directory that the Makefile uses.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Adds namespace to all resources.
+namespace: router
+
+# Value of this field is prepended to the
+# names of all resources, e.g. a deployment named
+# "wordpress" becomes "alices-wordpress".
+# Note that it should also match with the prefix (text before '-') of the namespace
+# field above.
+namePrefix: ""
+
+# Labels to add to all resources and selectors.
+commonLabels:
+  app.kubernetes.io/name: epic
+  app.kubernetes.io/component: router
+
+resources:
+- namespace.yaml
+- bird-epic.yaml

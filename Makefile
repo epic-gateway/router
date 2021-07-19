@@ -2,8 +2,15 @@ REPO ?= registry.gitlab.com/acnodal/epic
 PREFIX ?= router
 SUFFIX ?= ${USER}-dev
 
-TAG ?= ${REPO}/${PREFIX}:${SUFFIX}
-DOCKERFILE ?= Dockerfile
+# Image URL to use all building/pushing image targets
+IMG ?= ${REPO}/${PREFIX}:${SUFFIX}
+
+# Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
+ifeq (,$(shell go env GOBIN))
+GOBIN=$(shell go env GOPATH)/bin
+else
+GOBIN=$(shell go env GOBIN)
+endif
 
 ##@ Default Goal
 .PHONY: help
@@ -22,7 +29,28 @@ help: ## Display this help
 ##@ Development Goals
 
 image:	## Build the Docker image
-	docker build --tag=${TAG} ${DOCKER_BUILD_OPTIONS} .
+	docker build --tag=${IMG} ${DOCKER_BUILD_OPTIONS} .
 
 install:	image ## Push the image to the registry
-	docker push ${TAG}
+	docker push ${IMG}
+
+# Generate manifests e.g. CRD, RBAC etc.
+.PHONY: manifests
+manifests: kustomize
+	$(KUSTOMIZE) build config/default | IMG=$(IMG) envsubst > deploy/bird-epic.yaml
+	cp deploy/bird-epic.yaml deploy/bird-epic-${SUFFIX}.yaml
+
+kustomize: ## Install kustomize
+ifeq (, $(shell which kustomize))
+	@{ \
+	set -e ;\
+	KUSTOMIZE_GEN_TMP_DIR=$$(mktemp -d) ;\
+	cd $$KUSTOMIZE_GEN_TMP_DIR ;\
+	go mod init tmp ;\
+	go get sigs.k8s.io/kustomize/kustomize/v3@v3.8.6 ;\
+	rm -rf $$KUSTOMIZE_GEN_TMP_DIR ;\
+	}
+KUSTOMIZE=$(GOBIN)/kustomize
+else
+KUSTOMIZE=$(shell which kustomize)
+endif

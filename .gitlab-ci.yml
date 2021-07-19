@@ -9,6 +9,22 @@
     export TAG_SPECIFIC="${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
   fi
 
+manifest:
+  image: golang:1.15.9-buster
+
+  before_script:
+  - *set-tag
+  - apt-get update
+  - apt-get install -y gettext-base
+
+  script:
+  - make SUFFIX=${TAG_SPECIFIC} manifests
+  - 'curl --silent --show-error --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file deploy/bird-epic.yaml "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/manifest/0.0.1/bird-epic.yaml"'
+
+  artifacts:
+    paths:
+      - deploy/*.yaml
+
 docker:
   image: docker:20.10.5
   services:
