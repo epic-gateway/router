@@ -5,13 +5,12 @@ metadata:
   namespace: router
 data:
   bird.conf: |-
-    # Configuration Skeleton for BIRD egw 
+    # Configuration Skeleton for BIRD epic
     # includes come from PVC
-    
+
     # set in env var retrieved and set in envvar.conf
     include "/usr/local/include/bird/envvar.conf";
-    
-    
+
     #  Router ID set to host addr
     router id k8sipaddr;
 
@@ -24,4 +23,3 @@ data:
     include "/usr/local/include/bird/routes_static.conf";
     include "/usr/local/include/bird/bgp_policies.conf";
     include "/usr/local/include/bird/bgp_peers.conf";
-    

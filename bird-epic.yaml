@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bird-egw
+  name: bird-epic
   namespace: router
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bird-egw
+      app: bird-epic
   template:
     metadata:
       labels:
-        app: bird-egw
+        app: bird-epic
     spec:
       containers:
-      - name: bird-egw
+      - name: bird-epic
         env:
         - name: BIRD_NODE_NAME
           valueFrom:
@@ -28,7 +28,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: registry.gitlab.com/acnodal/egw-router/bird-egw:latest
+        image: registry.gitlab.com/acnodal/epic/router:v0.1.0
         imagePullPolicy: Always
         resources:
           limits:
@@ -49,24 +49,12 @@ spec:
       - name: gitlab
       volumes:
       - name: birdconfig
-        persistentVolumeClaim:
-          claimName: birdconfigvol
+        hostPath:
+          path: /opt/acnodal/bird
+          type: "Directory"
       - name: bird-cm
         configMap:
           name: bird-cm
       hostNetwork: true
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
----      
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: birdconfigvol
-  namespace: router
-spec:
-  storageClassName: openebs-jiva-default
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5G

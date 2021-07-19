@@ -24,6 +24,6 @@ docker:
 
   artifacts:
     paths:
-    - ./*.yml
+    - ./*.yaml
     - ./*.sh
     - configlets/*
