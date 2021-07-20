@@ -23,7 +23,8 @@ manifest:
 
   artifacts:
     paths:
-      - deploy/*.yaml
+    - ./*.yaml
+    - deploy/*.yaml
 
 docker:
   image: docker:20.10.5
