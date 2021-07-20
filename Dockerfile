@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /root
 
-RUN git clone --depth=1 --branch=v2.0.7 https://gitlab.nic.cz/labs/bird.git
+RUN git clone --depth=1 --branch=v2.0.8 https://gitlab.nic.cz/labs/bird.git
 
 RUN cd bird && \
 	autoconf && \
