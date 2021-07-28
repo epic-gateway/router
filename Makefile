@@ -36,7 +36,7 @@ install:	image ## Push the image to the registry
 
 # Generate manifests e.g. CRD, RBAC etc.
 .PHONY: manifests
-manifests: kustomize
+manifests: kustomize ## Generate deployment manifests
 	$(KUSTOMIZE) build config/default | IMG=$(IMG) envsubst > deploy/bird-epic.yaml
 	cp deploy/bird-epic.yaml deploy/bird-epic-${SUFFIX}.yaml
 
