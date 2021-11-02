@@ -15,11 +15,11 @@ manifest:
   before_script:
   - *set-tag
   - apt-get update
-  - apt-get install -y gettext-base
+  - apt-get install -y gettext-base bzip2
 
   script:
-  - make SUFFIX=${TAG_SPECIFIC} manifests
-  - 'curl --silent --show-error --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file deploy/bird-epic.yaml "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/manifest/0.0.1/bird-epic.yaml"'
+  - make SUFFIX=${TAG_SPECIFIC} package
+  - 'curl --silent --show-error --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file bird-epic-${TAG_SPECIFIC}.tar.bz2 "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/package/${TAG_SPECIFIC}/bird-epic.tar.bz2"'
 
   artifacts:
     paths:

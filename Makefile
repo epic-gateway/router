@@ -40,6 +40,10 @@ manifests: kustomize ## Generate deployment manifests
 	$(KUSTOMIZE) build config/default | IMG=$(IMG) envsubst > deploy/bird-epic.yaml
 	cp deploy/bird-epic.yaml deploy/bird-epic-${SUFFIX}.yaml
 
+.PHONY: package
+package: manifests
+	tar cjf bird-epic-${SUFFIX}.tar.bz2 *.yaml *.sh configlets deploy/*.yaml
+
 kustomize: ## Install kustomize
 ifeq (, $(shell which kustomize))
 	@{ \
