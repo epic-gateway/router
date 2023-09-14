@@ -1,4 +1,4 @@
-REPO ?= registry.gitlab.com/acnodal/epic
+REPO ?= quay.io/epic-gateway
 PREFIX ?= router
 SUFFIX ?= ${USER}-dev
 
@@ -28,10 +28,10 @@ help: ## Display this help
 
 ##@ Development Goals
 
-image:	## Build the Docker image
+image-build:	## Build the Docker image
 	docker build --tag=${IMG} ${DOCKER_BUILD_OPTIONS} .
 
-install:	image ## Push the image to the registry
+image-push:	## Push the image to the registry
 	docker push ${IMG}
 
 # Generate manifests e.g. CRD, RBAC etc.
